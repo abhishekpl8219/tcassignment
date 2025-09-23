@@ -7,6 +7,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [usersData, setUsersData] = useState([]);
   const [deletemsg, setDeleteMsg] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+
   const fetchData = async () => {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -38,6 +40,11 @@ const Home = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [deletemsg]);
+  const pageSize = 3;
+  const totalUsers = usersData.length;
+  const startPage = currentPage * pageSize;
+  const endPage = startPage + pageSize;
+  const numberofpages = Math.ceil(totalUsers / pageSize);
 
   return (
     <div className="main">
@@ -48,7 +55,7 @@ const Home = () => {
 
       <h2 className="title">Users List</h2>
       <div className="map1">
-        {usersData.map((item) => (
+        {usersData.slice(startPage, endPage).map((item) => (
           <div key={item.id} className="userData">
             <h3>{item.name}</h3>
             <p>
@@ -72,9 +79,33 @@ const Home = () => {
           </div>
         ))}
       </div>
-      <button className="btn" onClick={() => navigate("/createUser/")}>
-        Create a new User
-      </button>
+      <div className="newuser">
+        <button className="btn" onClick={() => navigate("/createUser/")}>
+          Create a new User
+        </button>
+      </div>
+      <div className="pagination">
+        <button
+          disabled={currentPage === 0}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+        >
+          Prev
+        </button>
+        {[...Array(numberofpages)].keys().map((item) => (
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentPage(item)}
+          >
+            {item}
+          </span>
+        ))}
+        <button
+          disabled={currentPage === numberofpages - 1}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
