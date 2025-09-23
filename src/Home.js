@@ -8,7 +8,9 @@ const Home = () => {
   const [usersData, setUsersData] = useState([]);
   const [deletemsg, setDeleteMsg] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-
+  const [pgLimit, setPgLimit] = useState(3);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const fetchData = async () => {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -40,7 +42,17 @@ const Home = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [deletemsg]);
-  const pageSize = 3;
+
+  useEffect(() => {
+    const results = usersData.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.company.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredUsers(results);
+  }, [searchQuery, usersData]);
+  const pageSize = pgLimit;
   const totalUsers = usersData.length;
   const startPage = currentPage * pageSize;
   const endPage = startPage + pageSize;
@@ -54,30 +66,54 @@ const Home = () => {
       </h6>
 
       <h2 className="title">Users List</h2>
+      <div>
+        <input
+          type="text"
+          value={searchQuery}
+          className="search-box"
+          placeholder="Search for name email or company"
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <div className="map1">
-        {usersData.slice(startPage, endPage).map((item) => (
-          <div key={item.id} className="userData">
-            <h3>{item.name}</h3>
-            <p>
-              <strong>ID:</strong> {item.id}
-            </p>
-            <p>
-              <strong>Email:</strong> {item.email}
-            </p>
-            <p>
-              <strong>Company:</strong> {item.company.name}
-            </p>
-            <button
-              className="btn"
-              onClick={() => navigate("/modify/" + item.id)}
-            >
-              Edit
-            </button>
-            <button className="btn" onClick={() => deleteUser(item.id)}>
-              Delete
-            </button>
-          </div>
-        ))}
+        {filteredUsers.length > 0
+          ? filteredUsers.map((item) => (
+              <div key={item.id} className="userData">
+                <h3>{item.name}</h3>
+                <p>
+                  <strong>ID:</strong> {item.id}
+                </p>
+                <p>
+                  <strong>Email:</strong> {item.email}
+                </p>
+                <p>
+                  <strong>Company:</strong> {item.company.name}
+                </p>
+              </div>
+            ))
+          : usersData.slice(startPage, endPage).map((item) => (
+              <div key={item.id} className="userData">
+                <h3>{item.name}</h3>
+                <p>
+                  <strong>ID:</strong> {item.id}
+                </p>
+                <p>
+                  <strong>Email:</strong> {item.email}
+                </p>
+                <p>
+                  <strong>Company:</strong> {item.company.name}
+                </p>
+                <button
+                  className="btn"
+                  onClick={() => navigate("/modify/" + item.id)}
+                >
+                  Edit
+                </button>
+                <button className="btn" onClick={() => deleteUser(item.id)}>
+                  Delete
+                </button>
+              </div>
+            ))}
       </div>
       <div className="newuser">
         <button className="btn" onClick={() => navigate("/createUser/")}>
@@ -105,6 +141,14 @@ const Home = () => {
         >
           Next
         </button>
+      </div>
+      <div className="paginationlimit">
+        <h5>Pagination limit</h5>
+        <input
+          type="number"
+          value={pgLimit}
+          onChange={(e) => setPgLimit(e.target.value)}
+        />
       </div>
     </div>
   );
