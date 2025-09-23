@@ -1,11 +1,15 @@
-import logo from "./logo.svg";
 import "./App.css";
+import FormData from "./FormData";
 import Home from "./Home";
-
+import { Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div>
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/modify/:index" element={<FormData />} />
+        <Route path="/createUser" element={<FormData />} />
+      </Routes>
     </div>
   );
 }
