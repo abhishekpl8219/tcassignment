@@ -124,6 +124,23 @@
   background: #357ab8;
 }
 
+.btn-newuser {
+  width: 200px;
+  padding: 12px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-newuser:hover {
+  background: #357ab8;
+}
+
 .pagination {
   display: flex;
   gap: 10px;
@@ -150,7 +167,7 @@
 }
 
 .search-box {
-  padding: 10px 30px;
+  padding: 10px 16px;
   width: 100%;
   max-width: 400px;
   margin: 15px auto;
@@ -158,12 +175,16 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .searchandsort {
   display: flex;
-  padding: 15px;
   align-items: center;
   justify-content: center;
-  gap: 200px
+  flex-wrap: wrap;
+  gap: 20px;
+  /* smaller, responsive gap */
+  margin: 10px auto;
+  padding: 0 10px;
 }

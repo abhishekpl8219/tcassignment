@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
+// Creating a sort function dropdown
 const Sort = ({ data, setData }) => {
   const [sortType, setSortType] = useState("");
+
+  //function used for sorting user data by name email id company name
   const handleSort = (e) => {
     const type = e.target.value;
     setSortType(type);

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+//Creating a form data page which will handle create edit a new user.
+
 const FormData = () => {
   const { index } = useParams();
   const [name, setName] = useState("");
@@ -10,6 +12,7 @@ const FormData = () => {
   const [msg, setMsg] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  //validate function for validation of various input fields
   const validate = () => {
     let newErrors = {};
     if (!id) {
@@ -38,6 +41,7 @@ const FormData = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  //fetching user details of the user in which client clicked on edit button
   const fetchSingleUser = async () => {
     try {
       const res = await fetch(
@@ -56,12 +60,15 @@ const FormData = () => {
   useEffect(() => {
     fetchSingleUser();
   }, [index]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg("");
     }, 1000);
     return () => clearTimeout(timer);
   }, [msg]);
+
+  //handling submit function of the form
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -79,6 +86,7 @@ const FormData = () => {
         setId("");
         setName("");
         setCompanyName("");
+        setPassword("");
       }
     } catch (error) {
       console.log(error);

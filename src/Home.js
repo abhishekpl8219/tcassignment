@@ -12,6 +12,8 @@ const Home = () => {
   const [pgLimit, setPgLimit] = useState(3);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
+  //function used for fetching user details from the backend api
   const fetchData = async () => {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -21,6 +23,8 @@ const Home = () => {
       console.log(error);
     }
   };
+
+  //function used for deleting the user by calling the api
   const deleteUser = async (id) => {
     try {
       console.log("Delete button clicked for ID:", id);
@@ -53,6 +57,8 @@ const Home = () => {
     );
     setFilteredUsers(results);
   }, [searchQuery, usersData]);
+
+  //variables used for implementing pagination
   const pageSize = pgLimit;
   const totalUsers = usersData.length;
   const startPage = currentPage * pageSize;
@@ -131,7 +137,10 @@ const Home = () => {
             ))}
       </div>
       <div className="newuser">
-        <button className="btn" onClick={() => navigate("/createUser/")}>
+        <button
+          className="btn-newuser"
+          onClick={() => navigate("/createUser/")}
+        >
           Create a new User
         </button>
       </div>
@@ -148,7 +157,7 @@ const Home = () => {
             style={{ cursor: "pointer" }}
             onClick={() => setCurrentPage(item)}
           >
-            {item + 1} {/* optional: show page numbers starting from 1 */}
+            {item + 1}
           </span>
         ))}
         <button
