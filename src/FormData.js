@@ -8,7 +8,36 @@ const FormData = () => {
   const [id, setId] = useState("");
   const [companyname, setCompanyName] = useState("");
   const [msg, setMsg] = useState("");
-
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let newErrors = {};
+    if (!id) {
+      newErrors.id = "ID is required";
+    } else if (isNaN(id)) {
+      newErrors.id = "ID must be a number";
+    }
+    if (!name) {
+      newErrors.name = "Name is required";
+    } else if (name.length < 3) {
+      newErrors.name = "Name must be altleast 3 characters";
+    }
+    if (!companyname) {
+      newErrors.companyname = "Company name is required";
+    }
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email is not valid";
+    }
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be 6 characters";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const fetchSingleUser = async () => {
     try {
       const res = await fetch(
@@ -36,6 +65,10 @@ const FormData = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!validate()) {
+        alert("Please check your form data");
+        return;
+      }
       const res = await axios.post(
         "https://jsonplaceholder.typicode.com/users"
       );
@@ -65,6 +98,7 @@ const FormData = () => {
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
+            {errors.id && <p style={{ color: "red" }}>{errors.id}</p>}
           </div>
           <div className="form-group">
             <label>Email:</label>
@@ -74,6 +108,7 @@ const FormData = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
           </div>
           <div className="form-group">
             <label>Name:</label>
@@ -83,6 +118,19 @@ const FormData = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {errors.password && (
+              <p style={{ color: "red" }}>{errors.password}</p>
+            )}
           </div>
           <div className="form-group">
             <label>Company:</label>
@@ -92,6 +140,9 @@ const FormData = () => {
               value={companyname}
               onChange={(e) => setCompanyName(e.target.value)}
             />
+            {errors.companyname && (
+              <p style={{ color: "red" }}>{errors.companyname}</p>
+            )}
           </div>
           <button type="submit" className="btn-submit">
             Save
