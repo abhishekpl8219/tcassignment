@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Sort from "./Sort";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -66,18 +67,23 @@ const Home = () => {
       </h6>
 
       <h2 className="title">Users List</h2>
-      <div>
-        <input
-          type="text"
-          value={searchQuery}
-          className="search-box"
-          placeholder="Search for name email or company"
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className="searchandsort">
+        <div>
+          <input
+            type="text"
+            value={searchQuery}
+            className="search-box"
+            placeholder="Search for name email or company"
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="sortdiv">
+          <Sort data={usersData} setData={setUsersData} />
+        </div>
       </div>
       <div className="map1">
         {filteredUsers.length > 0
-          ? filteredUsers.map((item) => (
+          ? filteredUsers.slice(startPage, endPage).map((item) => (
               <div key={item.id} className="userData">
                 <h3>{item.name}</h3>
                 <p>
@@ -89,6 +95,15 @@ const Home = () => {
                 <p>
                   <strong>Company:</strong> {item.company.name}
                 </p>
+                <button
+                  className="btn"
+                  onClick={() => navigate("/modify/" + item.id)}
+                >
+                  Edit
+                </button>
+                <button className="btn" onClick={() => deleteUser(item.id)}>
+                  Delete
+                </button>
               </div>
             ))
           : usersData.slice(startPage, endPage).map((item) => (
@@ -127,12 +142,13 @@ const Home = () => {
         >
           Prev
         </button>
-        {[...Array(numberofpages)].keys().map((item) => (
+        {Array.from({ length: numberofpages }, (_, item) => (
           <span
+            key={item}
             style={{ cursor: "pointer" }}
             onClick={() => setCurrentPage(item)}
           >
-            {item}
+            {item + 1} {/* optional: show page numbers starting from 1 */}
           </span>
         ))}
         <button

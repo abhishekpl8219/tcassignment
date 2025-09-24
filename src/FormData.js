@@ -9,8 +9,6 @@ const FormData = () => {
   const [companyname, setCompanyName] = useState("");
   const [msg, setMsg] = useState("");
 
-  const [userData, setUserData] = useState([]);
-
   const fetchSingleUser = async () => {
     try {
       const res = await fetch(

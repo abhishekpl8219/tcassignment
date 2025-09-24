@@ -150,7 +150,7 @@
 }
 
 .search-box {
-  padding: 10px 12px;
+  padding: 10px 30px;
   width: 100%;
   max-width: 400px;
   margin: 15px auto;
@@ -158,4 +158,12 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
+}
+
+.searchandsort {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  gap: 200px
 }
